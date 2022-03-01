@@ -24,4 +24,4 @@ jobs:
         run: dotnet restore
 
       - name: Build App 🚀
-        run: msbuild /t:BuildAll -verbosity:diag -property:Configuration=Release
+        run: msbuild -t:rebuild -verbosity:diag -property:Configuration=Release
