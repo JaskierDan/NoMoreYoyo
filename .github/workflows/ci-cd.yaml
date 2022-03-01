@@ -24,4 +24,4 @@ jobs:
         run: dotnet restore
 
       - name: Build App 🚀
-        run: msbuild -t:rebuild -verbosity:diag -property:Configuration=Release
+        run: msbuild NoMoreYoyo/NoMoreYoyo.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
