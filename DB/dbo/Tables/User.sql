@@ -7,6 +7,9 @@
     [Height]         DECIMAL (6)    NULL,
     [Sex]            BIT            NOT NULL,
     [RegisteredDate] DATETIME       NOT NULL,
+    [Age]            INT            NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
