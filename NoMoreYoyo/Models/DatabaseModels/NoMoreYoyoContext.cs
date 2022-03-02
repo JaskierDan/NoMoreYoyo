@@ -6,9 +6,6 @@ namespace NoMoreYoyo.Models
 {
     public partial class NoMoreYoyoContext : DbContext
     {
-        public NoMoreYoyoContext()
-        {
-        }
 
         public NoMoreYoyoContext(DbContextOptions<NoMoreYoyoContext> options)
             : base(options)
