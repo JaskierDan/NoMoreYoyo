@@ -30,4 +30,4 @@ jobs:
         run: msbuild NoMoreYoyo/NoMoreYoyo.csproj -t:rebuild -verbosity:n -property:Configuration=Release
 
       - name: Publish Build ✍
-        run: dotnet publish
+        run: dotnet publish --configuration Release
