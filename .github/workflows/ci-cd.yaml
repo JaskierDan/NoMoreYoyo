@@ -31,3 +31,9 @@ jobs:
 
       - name: Publish Build ✍
         run: dotnet publish --configuration Release
+
+      - name: Upload Atrifact 👑
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: D:\a\NoMoreYoyo\NoMoreYoyo\NoMoreYoyo\bin\Release\net5.0\publish\
