@@ -28,6 +28,16 @@ namespace NoMoreYoyo.Controllers
             return View();
         }
 
+        public IActionResult BodyAttributes()
+        {
+            return View();
+        }
+
+        public IActionResult Calories()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
