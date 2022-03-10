@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -24,4 +27,13 @@ jobs:
         run: dotnet restore
 
       - name: Build App 🚀
-        run: msbuild NoMoreYoyo/NoMoreYoyo.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
+        run: msbuild NoMoreYoyo/NoMoreYoyo.csproj -t:rebuild -verbosity:n -property:Configuration=Release
+
+      - name: Publish Build ✍
+        run: dotnet publish --configuration Release
+
+      - name: Upload Atrifact 👑
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: D:\a\NoMoreYoyo\NoMoreYoyo\NoMoreYoyo\bin\Release\net5.0\publish\

@@ -21,7 +21,7 @@ namespace NoMoreYoyo.Models
         public decimal? Height { get; set; }
         public bool Sex { get; set; }
         public DateTime RegisteredDate { get; set; }
-
+        public int? Age { get; set; }
         public virtual ICollection<BodyAttribute> BodyAttributes { get; set; }
         public virtual ICollection<Calory> Calories { get; set; }
     }
