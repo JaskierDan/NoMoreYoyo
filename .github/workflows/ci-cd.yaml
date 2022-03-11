@@ -21,7 +21,6 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Run Tests 📝
-        uses: actions/checkout@v2
         run: dotnet test
         
       - name: Setup msbuild ⚙
