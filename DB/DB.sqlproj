@@ -63,9 +63,12 @@
     <Build Include="dbo\Tables\Calories.sql" />
     <Build Include="dbo\Tables\MeasurementType.sql" />
     <Build Include="dbo\Tables\BodyAttributes.sql" />
-    <PostDeploy Include="dbo\init\AddDataToMeasurementType.sql" />
+    <None Include="dbo\init\AddDataToMeasurementType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="dbo\init\AddDataToUser.sql" />
   </ItemGroup>
 </Project>
