@@ -12,9 +12,32 @@ namespace NoMoreYoyo.Controllers
             DbContext = context;
         }
 
-        public IActionResult Index()
+        public IActionResult BodyAttributes()
         {
             return View();
+        }
+
+        public IActionResult Calories()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SignIn()
+        {
+            return RedirectToAction(nameof(BodyAttributes));
+        }
+
+        public IActionResult Signup()
+        {
+
+            //TO DO
+            return null;
         }
     }
 }
