@@ -28,34 +28,6 @@ namespace NoMoreYoyo.Controllers
             return View();
         }
 
-        public IActionResult BodyAttributes()
-        {
-            return View();
-        }
-
-        public IActionResult Calories()
-        {
-            return View();
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SignIn()
-        { 
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Signup()
-        {
-
-            //TO DO
-            return null;
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

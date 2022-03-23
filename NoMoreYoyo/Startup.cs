@@ -48,7 +48,7 @@ namespace NoMoreYoyo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Login}/{id?}");
+                    pattern: "{controller=Public}/{action=Login}/{id?}");
             });
         }
     }

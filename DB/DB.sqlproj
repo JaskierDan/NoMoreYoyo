@@ -56,14 +56,19 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\init" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\User.sql" />
     <Build Include="dbo\Tables\Calories.sql" />
     <Build Include="dbo\Tables\MeasurementType.sql" />
     <Build Include="dbo\Tables\BodyAttributes.sql" />
+    <None Include="dbo\init\AddDataToMeasurementType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="dbo\init\AddDataToUser.sql" />
   </ItemGroup>
 </Project>
