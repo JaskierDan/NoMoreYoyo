@@ -4,3 +4,56 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to record your calorias.</p>
+<div class="dailyCal">
+    <h2>Daily Calorie Intake</h2>
+    <label>Calorie:<input type="number" name="calorie" id="calorie"></input>kcal</label>
+    <br></br>
+    <label>Protein:<input type="number" name="protein" id="protein"></input>g</label>
+    <br></br>
+    <label>Carbohydrate:<input type="number" name="carbohydrate" id="carbohydrate"></input>g</label>
+    <br></br>
+    <label>Fat:<input type="number" name="fat" id="fat"></input>g</label>
+    <br></br>
+    <div id="errorDivCalorie" style="display:none">
+        <p id="errorMessageCalorie"></p>
+    </div>
+    <button id="caloriesButton">Send</button>
+    
+
+</div>
+
+
+<div class="calCal"> 
+    <h2>Calorie Calculator </h2>
+    <h3>Gender</h3>
+    <label><input type="radio" name="gender" value="male" id="male" checked="true"></input> Male</label>
+    <label><input type="radio" name="gender" value="female" id="female"></input> Female</label>
+    <br></br>
+    <h3>Weight</h3>
+    <label><input type="number" name="weight" id="weight"></input>kg</label>
+    <br></br>
+    <h3>Height</h3>
+    <label><input type="number" name="height" id="height"></input>cm</label>
+    <br></br>
+    <h3>Age</h3>
+    <label><input type="number" name="age" id="age"></input></label>
+    <br></br>
+    <h3>Activity</h3>
+    <select name="activity" class="activity" id="activity">
+      <option value="1.2">Not Active</option>
+      <option value="1.375">Lightly Atcive</option>
+      <option value="1.55">Moderately Active</option>
+      <option value="1.725">Very Active</option>
+      <option value="1.9">Extra Active</option>
+    </select>
+    <br></br>
+    <div id="errorDiv" style="display:none">
+        <p id="errorMessage"></p>
+    </div>
+    <button id="calculationButton">Calculation</button>
+    <div id="calculatedCal" style="display:none">
+        <p id="calculatedCalMessage"> </p>
+    </div>
+
+    <script src="~/js/caleries.js"></script>
+</div>
