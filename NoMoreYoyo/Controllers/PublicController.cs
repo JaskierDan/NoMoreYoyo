@@ -39,5 +39,10 @@ namespace NoMoreYoyo.Controllers
             //TO DO
             return null;
         }
+
+        public IActionResult MyProfile()
+        {
+            return View();
+        }
     }
 }
