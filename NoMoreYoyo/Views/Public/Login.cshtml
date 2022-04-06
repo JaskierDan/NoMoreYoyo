@@ -39,33 +39,50 @@
     <table>
         <tr>
             <td>Username: </td>
-            <td>@Html.TextBoxFor(m => m.UserName)</td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </td>
         </tr>
         <tr>
             <td>Email Address: </td>
-            <td>@Html.TextBoxFor(m => m.EmailAddress)</td>
+            <td>
+                @Html.TextBoxFor(m => m.EmailAddress)
+                @Html.ValidationMessageFor(m => m.EmailAddress)
+            </td>
         </tr>
         <tr>
             <td>Password: </td>
-            <td>@Html.PasswordFor(m => m.Password)</td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
         </tr>
         <tr>
             <td>Password again: </td>
-            <td>@Html.PasswordFor(m => m.Password)</td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
         </tr>
         <tr>
             <td>Weight: </td>
-            <td>@Html.TextBoxFor(m => m.Weight)</td>
+            <td>
+                @Html.TextBoxFor(m => m.Weight)
+            </td>
         </tr>
         <tr>
             <td>Height: </td>
-            <td>@Html.TextBoxFor(m => m.Height)</td>
+            <td>
+                @Html.TextBoxFor(m => m.Height)
+            </td>
         </tr>
         <tr>
             <td>Sex: </td>
             <td>
                 @Html.RadioButtonFor(m => m.Sex, 0) Male
                 @Html.RadioButtonFor(m => m.Sex, 1) Female
+            </td>
         </tr>
         <tr>
             <td>Age: </td>

@@ -49,9 +49,25 @@ namespace NoMoreYoyo.Controllers
 
         public IActionResult Signup(LoginViewModel model)
         {
+            if (model.UserName == null)
+            {
+                ModelState.AddModelError(nameof(model.UserName), "You must provide a username if you wish to sign up!");
+            }
+            if (model.Password == null)
+            {
+                ModelState.AddModelError(nameof(model.Password), "You must provide a password if you wish to sign up!");
+            }
+            if (model.EmailAddress == null)
+            {
+                ModelState.AddModelError(nameof(model.EmailAddress), "You must provide an email address if you wish to sign up!");
+            }
 
-            //TO DO
-            return null;
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Login), model);
+            }
+
+            return RedirectToAction(nameof(BodyAttributes));
         }
     }
 }
