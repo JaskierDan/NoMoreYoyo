@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoMoreYoyo.Models;
+using System;
 
 namespace NoMoreYoyo.Controllers
 {
@@ -64,10 +65,27 @@ namespace NoMoreYoyo.Controllers
 
             if (!ModelState.IsValid)
             {
+                RegisterUser(model);
                 return View(nameof(Login), model);
             }
 
             return RedirectToAction(nameof(BodyAttributes));
+        }
+
+        private void RegisterUser(LoginViewModel model)
+        {
+            var user = new User()
+            {
+                UserName = model.UserName,
+                EmailAddress = model.EmailAddress,
+                Password = model.Password,
+                Sex = model.Sex,
+                RegisteredDate = DateTime.UtcNow
+            };
+
+            DbContext.Attach(user);
+            DbContext.Users.Add(user);
+            DbContext.SaveChanges();
         }
     }
 }
