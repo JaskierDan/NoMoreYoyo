@@ -39,6 +39,7 @@ jobs:
           path: D:\a\NoMoreYoyo\NoMoreYoyo\NoMoreYoyo\bin\Release\net5.0\publish\
 
   sonarcloud:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
