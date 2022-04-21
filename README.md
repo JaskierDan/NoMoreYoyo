@@ -1,4 +1,4 @@
 # NoMoreYoyo
 
 [![Continuous Integration and Deployment](https://github.com/JaskierDan/NoMoreYoyo/actions/workflows/ci-cd.yaml/badge.svg?branch=main)](https://github.com/JaskierDan/NoMoreYoyo/actions/workflows/ci-cd.yaml)
-[SonarCloud](https://sonarcloud.io/project/overview?id=JaskierDan_NoMoreYoyo)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=JaskierDan_NoMoreYoyo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=JaskierDan_NoMoreYoyo)
