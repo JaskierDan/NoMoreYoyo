@@ -1,0 +1,97 @@
+﻿@model NoMoreYoyo.Models.LoginViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<h3><b>Login</b></h3>
+
+@using (Html.BeginForm("SignIn", "Public", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>Username: </td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>Password: </td>
+            <td>
+                @Html.TextBoxFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Login" name="btnLogin" /></td>
+        </tr>
+    </table>
+}
+
+<br>
+
+<h3><b>Signup</b></h3>
+@using (Html.BeginForm("Signup", "Public", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>Username: </td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>Email Address: </td>
+            <td>
+                @Html.TextBoxFor(m => m.EmailAddress)
+                @Html.ValidationMessageFor(m => m.EmailAddress)
+            </td>
+        </tr>
+        <tr>
+            <td>Password: </td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
+        </tr>
+        <tr>
+            <td>Password again: </td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
+        </tr>
+        <tr>
+            <td>Weight: </td>
+            <td>
+                @Html.TextBoxFor(m => m.Weight)
+            </td>
+        </tr>
+        <tr>
+            <td>Height: </td>
+            <td>
+                @Html.TextBoxFor(m => m.Height)
+            </td>
+        </tr>
+        <tr>
+            <td>Sex: </td>
+            <td>
+                @Html.RadioButtonFor(m => m.Sex, 0) Male
+                @Html.RadioButtonFor(m => m.Sex, 1) Female
+            </td>
+        </tr>
+        <tr>
+            <td>Age: </td>
+            <td><input type="text" name="txtAge" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Create account" name="btnCreateAcc" /></td>
+        </tr>
+    </table>
+}
+
+
