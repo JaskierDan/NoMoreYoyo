@@ -59,7 +59,7 @@ jobs:
       - name: Install Doxygen
         run: |
           sudo apt-get install -y doxygen
-          doxygen -g [configName]
+          doxygen -g Doxyfile
           doxygen Doxyfile
 
       - name: Generate Documentation
