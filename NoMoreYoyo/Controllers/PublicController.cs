@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NoMoreYoyo.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NoMoreYoyo.Controllers
 {
@@ -12,10 +16,27 @@ namespace NoMoreYoyo.Controllers
         {
             DbContext = context;
         }
-
+        
         public IActionResult BodyAttributes()
         {
-            return View();
+            
+            
+
+
+            BodyAttributesViewModel model = new BodyAttributesViewModel();
+
+            var measurementTypes = DbContext.MeasurementTypes.ToList();
+
+            foreach(var item in measurementTypes)
+            {
+                model.MeasurementTypes.Add(new SelectListItem
+                {
+                    Text = $"{item.Name} ({item.Metric})",
+                    Value = item.Id.ToString()
+                }) ;
+            }
+            
+            return View(model);
         }
 
         public IActionResult Calories()

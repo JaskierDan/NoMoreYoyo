@@ -1,7 +1,9 @@
-﻿@{
+﻿@model NoMoreYoyo.Models.BodyAttributesViewModel
+@{
     ViewData["Title"] = "Body Attributes";
 }
 
 <h1>@ViewData["Title"]</h1>
+    @Html.DropDownListFor(model => model.MeasurementTypes,Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
 
-<p>Use this page to record your body attributes</p>
+    <p>Use this page to record your body attributes</p>
