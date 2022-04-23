@@ -1,24 +1,29 @@
-﻿@model NoMoreYoyo.Models.User
-
+@model NoMoreYoyo.Models.LoginViewModel
 @{
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
 <h3><b>Login</b></h3>
- 
+
 @using (Html.BeginForm("SignIn", "Public", FormMethod.Post))
 {
     <table>
         <tr>
             <td>Username: </td>
-            <td>@Html.TextBoxFor(m => m.Id)</td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </td>
         </tr>
         <tr>
             <td>Password: </td>
-            <td> @Html.TextBoxFor(m => m.Password)</td>
+            <td>
+                @Html.TextBoxFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
         </tr>
         <tr>
-            <td colspan="2"><input type="submit" value="Login" name = "btnLogin" /></td>
+            <td colspan="2"><input type="submit" value="Login" name="btnLogin" /></td>
         </tr>
     </table>
 }
@@ -31,39 +36,57 @@
     <table>
         <tr>
             <td>Username: </td>
-            <td>@Html.TextBoxFor(m => m.Id)</td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </td>
         </tr>
         <tr>
             <td>Email Address: </td>
-            <td>@Html.TextBoxFor(m => m.EmailAddress)</td>
+            <td>
+                @Html.TextBoxFor(m => m.EmailAddress)
+                @Html.ValidationMessageFor(m => m.EmailAddress)
+            </td>
         </tr>
         <tr>
             <td>Password: </td>
-            <td>@Html.PasswordFor(m => m.Password)</td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
         </tr>
         <tr>
             <td>Password again: </td>
-            <td>@Html.PasswordFor(m => m.Password)</td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
         </tr>
         <tr>
             <td>Weight: </td>
-            <td>@Html.TextBoxFor(m => m.Weight)</td>
+            <td>
+                @Html.TextBoxFor(m => m.Weight)
+            </td>
         </tr>
         <tr>
             <td>Height: </td>
-            <td>@Html.TextBoxFor(m => m.Height)</td>
+            <td>
+                @Html.TextBoxFor(m => m.Height)
+            </td>
         </tr>
         <tr>
             <td>Sex: </td>
-            <td>@Html.RadioButtonFor(m => m.Sex,0) Male
-                @Html.RadioButtonFor(m => m.Sex,1) Female
+            <td>
+                @Html.RadioButtonFor(m => m.Sex, 0) Male
+                @Html.RadioButtonFor(m => m.Sex, 1) Female
+            </td>
         </tr>
         <tr>
             <td>Age: </td>
             <td>@Html.TextBoxFor(m => m.Age)</td>
         </tr>
         <tr>
-            <td colspan="2"><input type="submit" value="Create account" name = "btnCreateAcc" /></td>
+            <td colspan="2"><input type="submit" value="Create account" name="btnCreateAcc" /></td>
         </tr>
     </table>
 }
