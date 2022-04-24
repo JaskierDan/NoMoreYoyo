@@ -50,6 +50,20 @@ namespace NoMoreYoyo.Controllers
         }
 
         [HttpPost]
+        public ActionResult SaveMeasurement(BodyAttributesViewModel model)
+        {
+            if (model.Value == 0) {
+                ModelState.AddModelError("Value"," Value must bne greater than 0!");
+            }
+
+            if (!ModelState.IsValid) {
+                return View(nameof(BodyAttributes), model);
+            }
+
+            return Json(new { success = true, value = model.Value });
+        }
+
+        [HttpPost]
         public ActionResult SignIn(LoginViewModel model)
         {
             if (model.UserName == null)

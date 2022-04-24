@@ -4,6 +4,12 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-    @Html.DropDownListFor(model => model.MeasurementTypes,Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
+@using (Html.BeginForm("SaveMeasurement", "Public", FormMethod.Post, new { @class = "form-group" }))
+{
+    @Html.DropDownListFor(model => model.MeasurementTypes, Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
+    @Html.TextBoxFor(model => model.Value, new { @class = "form-control", @type = "number" });
+    <button type="submit" class="form-control">Save</button>
+}
 
-    <p>Use this page to record your body attributes</p>
+
+<p>Use this page to record your body attributes</p>
