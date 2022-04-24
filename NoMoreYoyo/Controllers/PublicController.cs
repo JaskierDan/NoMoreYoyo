@@ -128,5 +128,10 @@ namespace NoMoreYoyo.Controllers
             else
                 return (665 + (decimal)9.6 * model.Weight + (decimal)1.7 * model.Height - (decimal)4.7 * model.Age) * (decimal)model.Activity;
         }
+
+        public IActionResult MyProfile()
+        {
+            return View();
+        }
     }
 }
