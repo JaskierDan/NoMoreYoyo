@@ -121,7 +121,7 @@ namespace NoMoreYoyo.Controllers
             DbContext.SaveChanges();
         }
 
-        private decimal GetCalories(CaloriesViewModel model)
+        public decimal GetCalories(CaloriesViewModel model)
         {
             if (model.Sex == 0)
                 return (66 + (decimal)13.7 * model.Weight + 5 * model.Height - (decimal)6.8 * model.Age) * (decimal)model.Activity;
