@@ -18,9 +18,9 @@ namespace NoMoreYoyo.Controllers
             return View();
         }
 
-        public IActionResult Calories()
+        public IActionResult Calories(CaloriesViewModel model = null)
         {
-            return View();
+            return View(model ?? new CaloriesViewModel());
         }
 
         public IActionResult Login(LoginViewModel model)
@@ -46,6 +46,39 @@ namespace NoMoreYoyo.Controllers
             }
 
             return RedirectToAction(nameof(BodyAttributes));
+        }
+        [HttpPost]
+        public ActionResult SaveHealthStats(CaloriesViewModel model)
+        {
+            return View(nameof(Calories), model);
+        }
+
+        [HttpPost]
+        public ActionResult CalculateCalories(CaloriesViewModel model)
+        {
+            if (model.Weight == 0)
+            {
+                ModelState.AddModelError(nameof(model.Weight), "Value must be greater than 0!");
+            }
+            if (model.Height == 0)
+            {
+                ModelState.AddModelError(nameof(model.Height), "Value must be greater than 0!");
+            }
+            if (model.Age == 0)
+            {
+                ModelState.AddModelError(nameof(model.Age), "Value must be greater than 0!");
+            }
+            if (model.Activity == null)
+            {
+                ModelState.AddModelError(nameof(model.Activity), "You must select a level of activity!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return PartialView(nameof(Calories), model);
+            }
+
+            return Json(new { success = true, calories = GetCalories(model) });
         }
 
         public IActionResult Signup(LoginViewModel model)
@@ -86,6 +119,19 @@ namespace NoMoreYoyo.Controllers
             DbContext.Attach(user);
             DbContext.Users.Add(user);
             DbContext.SaveChanges();
+        }
+
+        public decimal GetCalories(CaloriesViewModel model)
+        {
+            if (model.Sex == 0)
+                return (66 + (decimal)13.7 * model.Weight + 5 * model.Height - (decimal)6.8 * model.Age) * (decimal)model.Activity;
+            else
+                return (665 + (decimal)9.6 * model.Weight + (decimal)1.7 * model.Height - (decimal)4.7 * model.Age) * (decimal)model.Activity;
+        }
+
+        public IActionResult MyProfile()
+        {
+            return View();
         }
     }
 }

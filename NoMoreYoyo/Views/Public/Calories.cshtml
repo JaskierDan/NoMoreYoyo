@@ -1,59 +1,122 @@
-﻿@{
+﻿@model NoMoreYoyo.Models.CaloriesViewModel
+@{
     ViewData["Title"] = "Calories";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to record your calorias.</p>
-<div class="dailyCal">
-    <h2>Daily Calorie Intake</h2>
-    <label>Calorie:<input type="number" name="calorie" id="calorie"></input>kcal</label>
-    <br></br>
-    <label>Protein:<input type="number" name="protein" id="protein"></input>g</label>
-    <br></br>
-    <label>Carbohydrate:<input type="number" name="carbohydrate" id="carbohydrate"></input>g</label>
-    <br></br>
-    <label>Fat:<input type="number" name="fat" id="fat"></input>g</label>
-    <br></br>
-    <div id="errorDivCalorie" style="display:none">
-        <p id="errorMessageCalorie"></p>
+<div class="card">
+    <h1>@ViewData["Title"]</h1>
+    <p class="page-item">Use this page to record details such as caloric intake, proteins, etc. Use the calorie calculator to get your accurate daily caloric intake.</p>
+    <div class="card-body">
+        @using (Html.BeginForm("SaveHealthStats", "Public", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.LabelFor(model => model.Calories, new { @class = "form-check-label text-uppercase" });
+            @Html.TextBoxFor(model => model.Calories, new { @class = "form-control", @type = "number" });
+            <br />
+            @Html.LabelFor(model => model.Proteins, new { @class = "form-check-label text-uppercase" });
+            @Html.TextBoxFor(model => model.Proteins, new { @class = "form-control", @type = "number" });
+            <br />
+            @Html.LabelFor(model => model.Carbohydrates, new { @class = "form-check-label text-uppercase" });
+            @Html.TextBoxFor(model => model.Carbohydrates, new { @class = "form-control", @type = "number" });
+            <br />
+            @Html.LabelFor(model => model.Fats, new { @class = "form-check-label text-uppercase" });
+            @Html.TextBoxFor(model => model.Fats, new { @class = "form-control", @type = "number" });
+            <br />
+            <button type="submit" class="form-control">Save</button>
+        }
+        <hr class="mt-5 mb-5">
+        <form id="calculator" class="form-group">
+            @Html.LabelFor(model => model.Weight, new { @class = "form-check-label text-uppercase" })
+            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+            <br />
+            @Html.LabelFor(model => model.Height, new { @class = "form-check-label text-uppercase" })
+            @Html.TextBoxFor(model => model.Height, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger" })
+            <br />
+            @Html.LabelFor(model => model.Age, new { @class = "form-check-label text-uppercase" })
+            @Html.TextBoxFor(model => model.Age, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            <br />
+            @Html.LabelFor(model => model.Sex, new { @class = "form-check-label text-uppercase" })<br />
+            <hr class="mt-1 mb-1" />
+            <div class="row">
+                @Html.Label("MaleLabel", "Male", new { @class = "form-check-label col-lg-1" })
+                @Html.RadioButtonFor(model => model.Sex, 0, new { @class = "custom-radio form-control col-lg-2" })
+            </div>
+            <br />
+            <div class="row">
+                @Html.Label("FemaleLabel", "Female", new { @class = "form-check-label col-lg-1" })
+                @Html.RadioButtonFor(model => model.Sex, 1, new { @class = "Custom-radio form-control col-lg-2" })
+            </div>
+            <br />
+            @Html.LabelFor(model => model.Activity, new { @class = "form-check-label text-uppercase" })
+            @Html.DropDownListFor(model => model.Activity, new List<SelectListItem>{
+              new SelectListItem { Text = "Not Active", Value = "1.2"},
+              new SelectListItem { Text = "Lightly Active", Value = "1.375"},
+              new SelectListItem { Text = "Moderately Active", Value = "1.55"},
+              new SelectListItem { Text = "Very Active", Value = "1.725"},
+              new SelectListItem { Text = "Extra Active", Value = "1.9"}
+            }, "-Select Activity-", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Activity, "", new { @class = "text-danger" })
+            <br />
+        </form>
+        <button id="calculateCalories" class="form-control">Calculate</button>
     </div>
-    <button id="caloriesButton">Send</button>
-    
-
 </div>
 
+@section Scripts{
+    <script src="~/js/public/calories.js"></script>
+}
+@*<div class="dailyCal">
+        <h2>Daily Calorie Intake</h2>
+        <label>Calorie:<input type="number" name="calorie" id="calorie"></input>kcal</label>
+        <br></br>
+        <label>Protein:<input type="number" name="protein" id="protein"></input>g</label>
+        <br></br>
+        <label>Carbohydrate:<input type="number" name="carbohydrate" id="carbohydrate"></input>g</label>
+        <br></br>
+        <label>Fat:<input type="number" name="fat" id="fat"></input>g</label>
+        <br></br>
+        <div id="errorDivCalorie" style="display:none">
+            <p id="errorMessageCalorie"></p>
+        </div>
+        <button id="caloriesButton">Send</button>
 
-<div class="calCal"> 
-    <h2>Calorie Calculator </h2>
-    <h3>Gender</h3>
-    <label><input type="radio" name="gender" value="male" id="male" checked="true"></input> Male</label>
-    <label><input type="radio" name="gender" value="female" id="female"></input> Female</label>
-    <br></br>
-    <h3>Weight</h3>
-    <label><input type="number" name="weight" id="weight"></input>kg</label>
-    <br></br>
-    <h3>Height</h3>
-    <label><input type="number" name="height" id="height"></input>cm</label>
-    <br></br>
-    <h3>Age</h3>
-    <label><input type="number" name="age" id="age"></input></label>
-    <br></br>
-    <h3>Activity</h3>
-    <select name="activity" class="activity" id="activity">
-      <option value="1.2">Not Active</option>
-      <option value="1.375">Lightly Atcive</option>
-      <option value="1.55">Moderately Active</option>
-      <option value="1.725">Very Active</option>
-      <option value="1.9">Extra Active</option>
-    </select>
-    <br></br>
-    <div id="errorDiv" style="display:none">
-        <p id="errorMessage"></p>
-    </div>
-    <button id="calculationButton">Calculation</button>
-    <div id="calculatedCal" style="display:none">
-        <p id="calculatedCalMessage"> </p>
+
     </div>
 
-    <script src="~/js/caleries.js"></script>
-</div>
+
+    <div class="calCal">
+        <h2>Calorie Calculator </h2>
+        <h3>Gender</h3>
+        <label><input type="radio" name="gender" value="male" id="male" checked="true"></input> Male</label>
+        <label><input type="radio" name="gender" value="female" id="female"></input> Female</label>
+        <br></br>
+        <h3>Weight</h3>
+        <label><input type="number" name="weight" id="weight"></input>kg</label>
+        <br></br>
+        <h3>Height</h3>
+        <label><input type="number" name="height" id="height"></input>cm</label>
+        <br></br>
+        <h3>Age</h3>
+        <label><input type="number" name="age" id="age"></input></label>
+        <br></br>
+        <h3>Activity</h3>
+        <select name="activity" class="activity" id="activity">
+            <option value="1.2">Not Active</option>
+            <option value="1.375">Lightly Atcive</option>
+            <option value="1.55">Moderately Active</option>
+            <option value="1.725">Very Active</option>
+            <option value="1.9">Extra Active</option>
+        </select>
+        <br></br>
+        <div id="errorDiv" style="display:none">
+            <p id="errorMessage"></p>
+        </div>
+        <button id="calculationButton">Calculation</button>
+        <div id="calculatedCal" style="display:none">
+            <p id="calculatedCalMessage"> </p>
+        </div>
+
+        <script src="~/js/caleries.js"></script>*@
+@*</div>*@

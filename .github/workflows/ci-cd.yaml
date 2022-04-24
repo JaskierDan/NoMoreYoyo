@@ -59,7 +59,7 @@ jobs:
       - name: Install Doxygen
         run: |
           sudo apt-get install -y doxygen
-          doxygen [-s] -g [configName]
+          doxygen -g Doxyfile
           doxygen Doxyfile
 
       - name: Generate Documentation
@@ -68,7 +68,8 @@ jobs:
           doxyfile-path: ./Doxyfile
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.7.3
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          branch: gh-pages
+          folder: ./
