@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace NoMoreYoyo.Models
 {
-
-    
     public class BodyAttributesViewModel
     {
         public int UserId { get; set; }
@@ -22,8 +20,5 @@ namespace NoMoreYoyo.Models
         {
             MeasurementTypes = new List<SelectListItem>();
         }
-
-
-
     }
 }
