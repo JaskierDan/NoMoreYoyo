@@ -18,13 +18,8 @@ namespace NoMoreYoyo.Controllers
             DbContext = context;
         }
 
-
         public IActionResult BodyAttributes(BodyAttributesViewModel passedModel = null)
         {
-
-
-
-
             BodyAttributesViewModel model = new BodyAttributesViewModel();
 
             if (passedModel != null) {
@@ -33,7 +28,6 @@ namespace NoMoreYoyo.Controllers
 
             GetMeasurementTypes(model);
             
-
             return View(model);
         }
 
@@ -58,9 +52,7 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(BodyAttributes), model);
             }
 
-            GetMeasurementTypes(model);
-
-            //DbContext.Add();
+            GetMeasurementTypes(model);            
 
             return View(nameof(BodyAttributes), model);
         }
