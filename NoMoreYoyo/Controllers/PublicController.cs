@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace NoMoreYoyo.Controllers
 {
@@ -16,26 +17,23 @@ namespace NoMoreYoyo.Controllers
         {
             DbContext = context;
         }
-        
-        public IActionResult BodyAttributes()
+
+
+        public IActionResult BodyAttributes(BodyAttributesViewModel passedModel = null)
         {
-            
-            
+
+
 
 
             BodyAttributesViewModel model = new BodyAttributesViewModel();
 
-            var measurementTypes = DbContext.MeasurementTypes.ToList();
-
-            foreach(var item in measurementTypes)
-            {
-                model.MeasurementTypes.Add(new SelectListItem
-                {
-                    Text = $"{item.Name} ({item.Metric})",
-                    Value = item.Id.ToString()
-                }) ;
+            if (passedModel != null) {
+                model.Value = passedModel.Value;
             }
+
+            GetMeasurementTypes(model);
             
+
             return View(model);
         }
 
@@ -53,14 +51,18 @@ namespace NoMoreYoyo.Controllers
         public ActionResult SaveMeasurement(BodyAttributesViewModel model)
         {
             if (model.Value == 0) {
-                ModelState.AddModelError("Value"," Value must bne greater than 0!");
+                ModelState.AddModelError(nameof(model.Value), " Value must be greater than 0!");
             }
 
             if (!ModelState.IsValid) {
                 return View(nameof(BodyAttributes), model);
             }
 
-            return Json(new { success = true, value = model.Value });
+            GetMeasurementTypes(model);
+
+            //DbContext.Add();
+
+            return View(nameof(BodyAttributes), model);
         }
 
         [HttpPost]
@@ -121,6 +123,21 @@ namespace NoMoreYoyo.Controllers
             DbContext.Attach(user);
             DbContext.Users.Add(user);
             DbContext.SaveChanges();
+        }
+
+        private void GetMeasurementTypes(BodyAttributesViewModel model)
+        {
+            var measurementTypes = DbContext.MeasurementTypes.ToList();
+
+            foreach (var item in measurementTypes)
+            {
+                Debug.WriteLine("Lefutott");
+                model.MeasurementTypes.Add(new SelectListItem
+                {
+                    Text = $"{item.Name} ({item.Metric})",
+                    Value = item.Id.ToString()
+                });
+            }
         }
     }
 }

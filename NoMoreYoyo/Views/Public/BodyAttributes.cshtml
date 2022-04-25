@@ -8,6 +8,7 @@
 {
     @Html.DropDownListFor(model => model.MeasurementTypes, Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
     @Html.TextBoxFor(model => model.Value, new { @class = "form-control", @type = "number" });
+    @Html.ValidationMessageFor(model => model.Value,"", new { @class="text-danger" })
     <button type="submit" class="form-control">Save</button>
 }
 
