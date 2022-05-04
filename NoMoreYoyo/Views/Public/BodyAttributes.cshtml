@@ -8,9 +8,26 @@
 {
     @Html.DropDownListFor(model => model.MeasurementTypes, Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
     @Html.TextBoxFor(model => model.Value, new { @class = "form-control", @type = "number" });
-    @Html.ValidationMessageFor(model => model.Value,"", new { @class="text-danger" })
+    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
     <button type="submit" class="form-control">Save</button>
 }
 
+@using (Html.BeginForm("GetGraph", "Public", FormMethod.Post, new { @class = "form-group" }))
+{
+    @Html.DropDownListFor(model => model.selectedBodypart, Model.MeasuredBodypart, "- Select Measured Body Part -", new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.MeasuredBodypart, "", new { @class = "text-danger" })
+    <button type="submit" class="form-control">Show Graph</button>
+}
+
+<script type="text/javascript">
+    var data = [];
+@foreach (int i in Model.BodyPartData)
+{
+
+   @:data.push(@i);
+}
+
+</script>
+<script src="~/js/public/Graph.js"></script>
 
 <p>Use this page to record your body attributes</p>

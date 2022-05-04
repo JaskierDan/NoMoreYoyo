@@ -27,7 +27,8 @@ namespace NoMoreYoyo.Controllers
             }
 
             GetMeasurementTypes(model);
-            
+
+            GetMeasuredBodyPart(model);
             return View(model);
         }
 
@@ -52,7 +53,21 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(BodyAttributes), model);
             }
 
-            GetMeasurementTypes(model);            
+            GetMeasurementTypes(model);
+            GetMeasuredBodyPart(model);
+
+            return View(nameof(BodyAttributes), model);
+        }
+
+        [HttpPost]
+        public ActionResult GetGraph(BodyAttributesViewModel model)
+        {
+
+
+
+            GetMeasurementTypes(model);
+            GetMeasuredBodyPart(model);
+            GetDataForBodypart(model);
 
             return View(nameof(BodyAttributes), model);
         }
@@ -156,7 +171,6 @@ namespace NoMoreYoyo.Controllers
 
             foreach (var item in measurementTypes)
             {
-                Debug.WriteLine("Lefutott");
                 model.MeasurementTypes.Add(new SelectListItem
                 {
                     Text = $"{item.Name} ({item.Metric})",
@@ -164,7 +178,39 @@ namespace NoMoreYoyo.Controllers
                 });
             }
         }
-        
+
+        private void GetDataForBodypart(BodyAttributesViewModel model)
+        {
+            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.selectedBodypart.ToString());
+
+            try
+            {
+                
+                result.ToList().ForEach(s => model.BodyPartData.Add(Convert.ToInt32(s.Value)));
+               // result.ToList().ForEach(s => Debug.WriteLine(s.Value));
+                
+
+            }
+            catch (Exception e) {
+                ModelState.AddModelError(nameof(model.BodyPartData), e.Message);
+            }
+            
+        }
+
+        private void GetMeasuredBodyPart(BodyAttributesViewModel model)
+        {
+            var measurementTypes = DbContext.MeasurementTypes.ToList();
+
+            foreach (var item in measurementTypes)
+            {
+                model.MeasuredBodypart.Add(new SelectListItem
+                {
+                    Text = $"{item.Name}",
+                    Value = item.Id.ToString()
+                });
+            }
+        }
+
         public decimal GetCalories(CaloriesViewModel model)
         {
             if (model.Sex == 0)

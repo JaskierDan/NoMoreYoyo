@@ -16,9 +16,15 @@ namespace NoMoreYoyo.Models
 
         public List<SelectListItem> MeasurementTypes { get; set; }
 
+        public List<SelectListItem> MeasuredBodypart { get; set; }
+        public decimal selectedBodypart { get; set; }
+        public List<int> BodyPartData { get; set; }
+
         public BodyAttributesViewModel()
         {
             MeasurementTypes = new List<SelectListItem>();
+            MeasuredBodypart = new List<SelectListItem>();
+            BodyPartData = new List<int>();
         }
     }
 }
