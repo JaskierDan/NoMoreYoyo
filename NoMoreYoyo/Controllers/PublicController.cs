@@ -22,12 +22,13 @@ namespace NoMoreYoyo.Controllers
         {
             BodyAttributesViewModel model = new BodyAttributesViewModel();
 
-            if (passedModel != null) {
+            if (passedModel != null)
+            {
                 model.Value = passedModel.Value;
             }
 
             GetMeasurementTypes(model);
-            
+
             return View(model);
         }
 
@@ -41,18 +42,25 @@ namespace NoMoreYoyo.Controllers
             return View(model);
         }
 
+        public IActionResult SignUp(SignUpViewModel model)
+        {
+            return View(model);
+        }
+
         [HttpPost]
         public ActionResult SaveMeasurement(BodyAttributesViewModel model)
         {
-            if (model.Value == 0) {
+            if (model.Value == 0)
+            {
                 ModelState.AddModelError(nameof(model.Value), " Value must be greater than 0!");
             }
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View(nameof(BodyAttributes), model);
             }
 
-            GetMeasurementTypes(model);            
+            GetMeasurementTypes(model);
 
             return View(nameof(BodyAttributes), model);
         }
@@ -60,13 +68,26 @@ namespace NoMoreYoyo.Controllers
         [HttpPost]
         public ActionResult SignIn(LoginViewModel model)
         {
-            if (model.UserName == null)
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == model.EmailOrUserName || u.EmailAddress == model.EmailOrUserName);
+
+            if (model.EmailOrUserName == null)
             {
-                ModelState.AddModelError(nameof(model.UserName), "You must provide a username if you wish to log in!");
+                ModelState.AddModelError(nameof(model.EmailOrUserName), "You must provide a username or email if you wish to log in!");
+            }
+            if (user == null)
+            {
+                ModelState.AddModelError(nameof(model.EmailOrUserName), "The username or email you provided does not match any registered accounts!");
             }
             if (model.Password == null)
             {
                 ModelState.AddModelError(nameof(model.Password), "You must provide a password if you wish to log in!");
+            }
+            if (user != null)
+            {
+                if (user.Password != model.Password)
+                {
+                    ModelState.AddModelError(nameof(model.Password), "The password you provided is incorrect!");
+                }
             }
 
             if (!ModelState.IsValid)
@@ -110,7 +131,8 @@ namespace NoMoreYoyo.Controllers
             return Json(new { success = true, calories = GetCalories(model) });
         }
 
-        public IActionResult Signup(LoginViewModel model)
+        [HttpPost]
+        public IActionResult Register(SignUpViewModel model)
         {
             if (model.UserName == null)
             {
@@ -120,6 +142,10 @@ namespace NoMoreYoyo.Controllers
             {
                 ModelState.AddModelError(nameof(model.Password), "You must provide a password if you wish to sign up!");
             }
+            if (model.PasswordAgain != model.Password)
+            {
+                ModelState.AddModelError(nameof(model.PasswordAgain), "The passwords don't match!");
+            }
             if (model.EmailAddress == null)
             {
                 ModelState.AddModelError(nameof(model.EmailAddress), "You must provide an email address if you wish to sign up!");
@@ -127,14 +153,14 @@ namespace NoMoreYoyo.Controllers
 
             if (!ModelState.IsValid)
             {
-                RegisterUser(model);
-                return View(nameof(Login), model);
+                return View(nameof(SignUp), model);
             }
 
+            RegisterUser(model);
             return RedirectToAction(nameof(BodyAttributes));
         }
 
-        private void RegisterUser(LoginViewModel model)
+        private void RegisterUser(SignUpViewModel model)
         {
             var user = new User()
             {
@@ -149,7 +175,7 @@ namespace NoMoreYoyo.Controllers
             DbContext.Users.Add(user);
             DbContext.SaveChanges();
         }
-        
+
         private void GetMeasurementTypes(BodyAttributesViewModel model)
         {
             var measurementTypes = DbContext.MeasurementTypes.ToList();
@@ -164,7 +190,7 @@ namespace NoMoreYoyo.Controllers
                 });
             }
         }
-        
+
         public decimal GetCalories(CaloriesViewModel model)
         {
             if (model.Sex == 0)

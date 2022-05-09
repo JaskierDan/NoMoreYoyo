@@ -21,7 +21,7 @@
             @Html.LabelFor(model => model.Fats, new { @class = "form-check-label text-uppercase" });
             @Html.TextBoxFor(model => model.Fats, new { @class = "form-control", @type = "number" });
             <br />
-            <button type="submit" class="form-control">Save</button>
+            <button type="submit" class="form-control btn-primary">Save</button>
         }
         <hr class="mt-5 mb-5">
         <form id="calculator" class="form-group">
@@ -60,7 +60,7 @@
             @Html.ValidationMessageFor(model => model.Activity, "", new { @class = "text-danger" })
             <br />
         </form>
-        <button id="calculateCalories" class="form-control">Calculate</button>
+        <button id="calculateCalories" class="form-control btn-primary">Calculate</button>
     </div>
 </div>
 
