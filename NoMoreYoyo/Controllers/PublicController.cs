@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NoMoreYoyo.Models;
-using System.Collections.Generic;
+using NoMoreYoyo.Helpers;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace NoMoreYoyo.Controllers
 {
@@ -20,21 +20,31 @@ namespace NoMoreYoyo.Controllers
 
         public IActionResult BodyAttributes(BodyAttributesViewModel passedModel = null)
         {
-            BodyAttributesViewModel model = new BodyAttributesViewModel();
-
-            if (passedModel != null)
+            if (IsAuthenticated())
             {
-                model.Value = passedModel.Value;
+                BodyAttributesViewModel model = new BodyAttributesViewModel();
+
+                if (passedModel != null)
+                {
+                    model.Value = passedModel.Value;
+                }
+
+                GetMeasurementTypes(model);
+
+                return View(model);
             }
 
-            GetMeasurementTypes(model);
-
-            return View(model);
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult Calories(CaloriesViewModel model = null)
         {
-            return View(model ?? new CaloriesViewModel());
+            if (IsAuthenticated())
+            {
+                return View(model ?? new CaloriesViewModel());
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult Login(LoginViewModel model)
@@ -95,11 +105,38 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(Login), model);
             }
 
+            SetUpSession(user);
+
             return RedirectToAction(nameof(BodyAttributes));
         }
         [HttpPost]
         public ActionResult SaveHealthStats(CaloriesViewModel model)
         {
+            if (model.Calories == 0)
+            {
+                ModelState.AddModelError(nameof(model.Calories), "Value must be greater than 0!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Calories), model);
+            }
+
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var calories = new Calory
+            {
+                UserId = user.Id,
+                Date = DateTime.UtcNow,
+                Amount = (decimal)model.Calories,
+                Fats = model.Fats,
+                Carbohydrates = model.Carbohydrates,
+                Proteins = model.Proteins
+            };
+
+            DbContext.Attach(calories);
+            DbContext.SaveChanges();
+
             return View(nameof(Calories), model);
         }
 
@@ -174,6 +211,8 @@ namespace NoMoreYoyo.Controllers
             DbContext.Attach(user);
             DbContext.Users.Add(user);
             DbContext.SaveChanges();
+
+            SetUpSession(user);
         }
 
         private void GetMeasurementTypes(BodyAttributesViewModel model)
@@ -201,7 +240,36 @@ namespace NoMoreYoyo.Controllers
 
         public IActionResult MyProfile()
         {
-            return View();
+            if (IsAuthenticated())
+            {
+                var model = new MyProfileViewModel
+                {
+                    UserName = HttpContext.Session.GetString(SessionVariables.Session_UserName),
+                    EmailAddress = HttpContext.Session.GetString(SessionVariables.Session_Email)
+                };
+
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        private bool IsAuthenticated()
+        {
+            var authenticated = Convert.ToBoolean(HttpContext.Session.GetString(SessionVariables.Session_IsAuthenticated));
+            return authenticated;
+        }
+
+        private void SetUpSession(User user)
+        {
+            HttpContext.Session.SetString(SessionVariables.Session_UserName, user.UserName);
+            HttpContext.Session.SetString(SessionVariables.Session_Email, user.EmailAddress);
+            HttpContext.Session.SetString(SessionVariables.Session_IsAuthenticated, "true");
+        }
+
+        private string CurrentUser()
+        {
+            return HttpContext.Session.GetString(SessionVariables.Session_UserName);
         }
     }
 }
