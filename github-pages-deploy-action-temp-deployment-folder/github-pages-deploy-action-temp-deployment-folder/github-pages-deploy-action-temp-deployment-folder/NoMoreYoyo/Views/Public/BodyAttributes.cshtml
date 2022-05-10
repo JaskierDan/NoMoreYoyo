@@ -1,7 +1,16 @@
-﻿@{
+﻿@model NoMoreYoyo.Models.BodyAttributesViewModel
+@{
     ViewData["Title"] = "Body Attributes";
 }
 
 <h1>@ViewData["Title"]</h1>
+@using (Html.BeginForm("SaveMeasurement", "Public", FormMethod.Post, new { @class = "form-group" }))
+{
+    @Html.DropDownListFor(model => model.MeasurementTypes, Model.MeasurementTypes, "- Select Measured Body Part -", new { @class = "form-control" })
+    @Html.TextBoxFor(model => model.Value, new { @class = "form-control", @type = "number" });
+    @Html.ValidationMessageFor(model => model.Value,"", new { @class="text-danger" })
+    <button type="submit" class="form-control">Save</button>
+}
+
 
 <p>Use this page to record your body attributes</p>
