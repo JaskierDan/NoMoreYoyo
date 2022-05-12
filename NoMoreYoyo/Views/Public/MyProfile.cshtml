@@ -1,9 +1,16 @@
-﻿@model NoMoreYoyo.Models.User
+﻿@model NoMoreYoyo.Models.MyProfileViewModel;
 
-<h1>My Profile</h1>
-
-<h3>@Html.LabelFor(m => m.UserName)</h3>
-<h2>@Html.LabelFor(m => m.EmailAddress)</h2>
-
-<input type="button" value="Change password" name = "btnChangePwd" />
-<input type="button" value="Delete account" name = "btnDeleteAccount" />
+<div class="card">
+    <div class="card-body">
+        <h1>My Profile</h1>
+        <div class="row">
+            <div class="col-4">
+                @Html.LabelFor(model => model.UserName, new { @class = "form-check-label text-uppercase" })
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @disabled = "disabled" })
+                <br />
+                @Html.LabelFor(model => model.EmailAddress, new { @class = "form-check-label text-uppercase" })
+                @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+</div>
