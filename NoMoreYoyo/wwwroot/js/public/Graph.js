@@ -73,4 +73,4 @@ function drawGraph() {
 
    
 }
-drawGraph(this)
+drawGraph()
