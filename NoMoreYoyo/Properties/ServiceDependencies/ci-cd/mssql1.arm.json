@@ -63,7 +63,7 @@
               },
               "kind": "v12.0,user",
               "location": "[parameters('resourceLocation')]",
-              "name": "nomoreyoyodbserver/NoMoreYoyo",
+              "name": "nomoreyoyodbserver/NoMoreYoyo_db",
               "type": "Microsoft.Sql/servers/databases",
               "apiVersion": "2017-10-01-preview",
               "dependsOn": [

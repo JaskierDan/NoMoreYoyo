@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NoMoreYoyo.Models;
+using System;
 
 namespace NoMoreYoyo
 {
@@ -22,6 +23,11 @@ namespace NoMoreYoyo
         {
             services.AddControllersWithViews();
             services.AddDbContextPool<NoMoreYoyoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NoMoreYoyoConnectionString")));
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +47,8 @@ namespace NoMoreYoyo
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 
