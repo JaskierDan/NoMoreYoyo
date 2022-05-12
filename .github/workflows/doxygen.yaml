@@ -7,7 +7,6 @@ on:
 
 jobs:
   doxygen:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Install Doxygen
