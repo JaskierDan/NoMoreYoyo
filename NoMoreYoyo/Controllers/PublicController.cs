@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NoMoreYoyo.Models;
-using System.Collections.Generic;
+using NoMoreYoyo.Helpers;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace NoMoreYoyo.Controllers
 {
@@ -20,11 +20,14 @@ namespace NoMoreYoyo.Controllers
 
         public IActionResult BodyAttributes(BodyAttributesViewModel passedModel = null)
         {
-            BodyAttributesViewModel model = new BodyAttributesViewModel();
+            if (IsAuthenticated())
+            {
+                BodyAttributesViewModel model = new BodyAttributesViewModel();
 
-            if (passedModel != null) {
-                model.Value = passedModel.Value;
-            }
+                if (passedModel != null)
+                {
+                    model.Value = passedModel.Value;
+                }
 
             GetMeasurementTypes(model);
 
@@ -32,9 +35,17 @@ namespace NoMoreYoyo.Controllers
             return View(model);
         }
 
+            return RedirectToAction(nameof(Login));
+        }
+
         public IActionResult Calories(CaloriesViewModel model = null)
         {
-            return View(model ?? new CaloriesViewModel());
+            if (IsAuthenticated())
+            {
+                return View(model ?? new CaloriesViewModel());
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult Login(LoginViewModel model)
@@ -42,14 +53,21 @@ namespace NoMoreYoyo.Controllers
             return View(model);
         }
 
+        public IActionResult SignUp(SignUpViewModel model)
+        {
+            return View(model);
+        }
+
         [HttpPost]
         public ActionResult SaveMeasurement(BodyAttributesViewModel model)
         {
-            if (model.Value == 0) {
+            if (model.Value == 0)
+            {
                 ModelState.AddModelError(nameof(model.Value), " Value must be greater than 0!");
             }
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View(nameof(BodyAttributes), model);
             }
 
@@ -75,13 +93,26 @@ namespace NoMoreYoyo.Controllers
         [HttpPost]
         public ActionResult SignIn(LoginViewModel model)
         {
-            if (model.UserName == null)
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == model.EmailOrUserName || u.EmailAddress == model.EmailOrUserName);
+
+            if (model.EmailOrUserName == null)
             {
-                ModelState.AddModelError(nameof(model.UserName), "You must provide a username if you wish to log in!");
+                ModelState.AddModelError(nameof(model.EmailOrUserName), "You must provide a username or email if you wish to log in!");
+            }
+            if (user == null)
+            {
+                ModelState.AddModelError(nameof(model.EmailOrUserName), "The username or email you provided does not match any registered accounts!");
             }
             if (model.Password == null)
             {
                 ModelState.AddModelError(nameof(model.Password), "You must provide a password if you wish to log in!");
+            }
+            if (user != null)
+            {
+                if (user.Password != model.Password)
+                {
+                    ModelState.AddModelError(nameof(model.Password), "The password you provided is incorrect!");
+                }
             }
 
             if (!ModelState.IsValid)
@@ -89,11 +120,38 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(Login), model);
             }
 
+            SetUpSession(user);
+
             return RedirectToAction(nameof(BodyAttributes));
         }
         [HttpPost]
         public ActionResult SaveHealthStats(CaloriesViewModel model)
         {
+            if (model.Calories == 0)
+            {
+                ModelState.AddModelError(nameof(model.Calories), "Value must be greater than 0!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Calories), model);
+            }
+
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var calories = new Calory
+            {
+                UserId = user.Id,
+                Date = DateTime.UtcNow,
+                Amount = (decimal)model.Calories,
+                Fats = model.Fats,
+                Carbohydrates = model.Carbohydrates,
+                Proteins = model.Proteins
+            };
+
+            DbContext.Attach(calories);
+            DbContext.SaveChanges();
+
             return View(nameof(Calories), model);
         }
 
@@ -125,7 +183,8 @@ namespace NoMoreYoyo.Controllers
             return Json(new { success = true, calories = GetCalories(model) });
         }
 
-        public IActionResult Signup(LoginViewModel model)
+        [HttpPost]
+        public IActionResult Register(SignUpViewModel model)
         {
             if (model.UserName == null)
             {
@@ -135,6 +194,10 @@ namespace NoMoreYoyo.Controllers
             {
                 ModelState.AddModelError(nameof(model.Password), "You must provide a password if you wish to sign up!");
             }
+            if (model.PasswordAgain != model.Password)
+            {
+                ModelState.AddModelError(nameof(model.PasswordAgain), "The passwords don't match!");
+            }
             if (model.EmailAddress == null)
             {
                 ModelState.AddModelError(nameof(model.EmailAddress), "You must provide an email address if you wish to sign up!");
@@ -142,14 +205,14 @@ namespace NoMoreYoyo.Controllers
 
             if (!ModelState.IsValid)
             {
-                RegisterUser(model);
-                return View(nameof(Login), model);
+                return View(nameof(SignUp), model);
             }
 
+            RegisterUser(model);
             return RedirectToAction(nameof(BodyAttributes));
         }
 
-        private void RegisterUser(LoginViewModel model)
+        private void RegisterUser(SignUpViewModel model)
         {
             var user = new User()
             {
@@ -163,8 +226,10 @@ namespace NoMoreYoyo.Controllers
             DbContext.Attach(user);
             DbContext.Users.Add(user);
             DbContext.SaveChanges();
+
+            SetUpSession(user);
         }
-        
+
         private void GetMeasurementTypes(BodyAttributesViewModel model)
         {
             var measurementTypes = DbContext.MeasurementTypes.ToList();
@@ -221,7 +286,36 @@ namespace NoMoreYoyo.Controllers
 
         public IActionResult MyProfile()
         {
-            return View();
+            if (IsAuthenticated())
+            {
+                var model = new MyProfileViewModel
+                {
+                    UserName = HttpContext.Session.GetString(SessionVariables.Session_UserName),
+                    EmailAddress = HttpContext.Session.GetString(SessionVariables.Session_Email)
+                };
+
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        private bool IsAuthenticated()
+        {
+            var authenticated = Convert.ToBoolean(HttpContext.Session.GetString(SessionVariables.Session_IsAuthenticated));
+            return authenticated;
+        }
+
+        private void SetUpSession(User user)
+        {
+            HttpContext.Session.SetString(SessionVariables.Session_UserName, user.UserName);
+            HttpContext.Session.SetString(SessionVariables.Session_Email, user.EmailAddress);
+            HttpContext.Session.SetString(SessionVariables.Session_IsAuthenticated, "true");
+        }
+
+        private string CurrentUser()
+        {
+            return HttpContext.Session.GetString(SessionVariables.Session_UserName);
         }
     }
 }
