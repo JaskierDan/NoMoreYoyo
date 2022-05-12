@@ -1,6 +1,6 @@
 ﻿
 console.log(data);
-function drawGraph(parent) {
+function drawGraph() {
 
     let width = 400;
     let height = 300;
