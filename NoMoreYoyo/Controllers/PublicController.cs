@@ -30,7 +30,6 @@ namespace NoMoreYoyo.Controllers
                 }
 
             GetMeasurementTypes(model);
-
             GetMeasuredBodyPart(model);
             return View(model);
         }
@@ -80,9 +79,6 @@ namespace NoMoreYoyo.Controllers
         [HttpPost]
         public ActionResult GetGraph(BodyAttributesViewModel model)
         {
-
-
-
             GetMeasurementTypes(model);
             GetMeasuredBodyPart(model);
             GetDataForBodypart(model);
@@ -249,17 +245,12 @@ namespace NoMoreYoyo.Controllers
             var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.selectedBodypart.ToString());
 
             try
-            {
-                
+            {           
                 result.ToList().ForEach(s => model.BodyPartData.Add(Convert.ToInt32(s.Value)));
-               // result.ToList().ForEach(s => Debug.WriteLine(s.Value));
-                
-
             }
             catch (Exception e) {
                 ModelState.AddModelError(nameof(model.BodyPartData), e.Message);
-            }
-            
+            }           
         }
 
         private void GetMeasuredBodyPart(BodyAttributesViewModel model)
