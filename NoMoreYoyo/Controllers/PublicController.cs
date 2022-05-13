@@ -29,10 +29,10 @@ namespace NoMoreYoyo.Controllers
                     model.Value = passedModel.Value;
                 }
 
-            GetMeasurementTypes(model);
-            GetMeasuredBodyPart(model);
-            return View(model);
-        }
+                GetMeasurementTypes(model);
+                GetMeasuredBodyPart(model);
+                return View(model);
+            }
 
             return RedirectToAction(nameof(Login));
         }
@@ -70,6 +70,19 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(BodyAttributes), model);
             }
 
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var measurement = new BodyAttribute
+            {
+                UserId = user.Id,
+                MeasurementTypeId = model.SelectedMeasurementType,
+                Value = model.Value,
+                Date = DateTime.UtcNow
+            };
+
+            DbContext.Attach(measurement);
+            DbContext.SaveChanges();
+
             GetMeasurementTypes(model);
             GetMeasuredBodyPart(model);
 
@@ -105,7 +118,7 @@ namespace NoMoreYoyo.Controllers
             }
             if (user != null)
             {
-                if (user.Password != Encryption.GenerateHashWithSalt(model.Password,user.Salt))
+                if (user.Password != Encryption.GenerateHashWithSalt(model.Password, user.Salt))
                 {
                     ModelState.AddModelError(nameof(model.Password), "The password you provided is incorrect!");
                 }
@@ -216,7 +229,7 @@ namespace NoMoreYoyo.Controllers
                 UserName = model.UserName,
                 EmailAddress = model.EmailAddress,
                 Salt = salt,
-                Password = Encryption.GenerateHashWithSalt(model.Password,salt),
+                Password = Encryption.GenerateHashWithSalt(model.Password, salt),
                 Sex = model.Sex,
                 RegisteredDate = DateTime.UtcNow
             };
@@ -244,15 +257,16 @@ namespace NoMoreYoyo.Controllers
 
         private void GetDataForBodypart(BodyAttributesViewModel model)
         {
-            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.selectedBodypart.ToString()).Where(u => u.UserId == 1 );
+            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.SelectedBodypart.ToString()).Where(u => u.UserId == 1);
 
             try
-            {           
+            {
                 result.ToList().ForEach(s => model.BodyPartData.Add(Convert.ToInt32(s.Value)));
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ModelState.AddModelError(nameof(model.BodyPartData), e.Message);
-            }           
+            }
         }
 
         private void GetMeasuredBodyPart(BodyAttributesViewModel model)
