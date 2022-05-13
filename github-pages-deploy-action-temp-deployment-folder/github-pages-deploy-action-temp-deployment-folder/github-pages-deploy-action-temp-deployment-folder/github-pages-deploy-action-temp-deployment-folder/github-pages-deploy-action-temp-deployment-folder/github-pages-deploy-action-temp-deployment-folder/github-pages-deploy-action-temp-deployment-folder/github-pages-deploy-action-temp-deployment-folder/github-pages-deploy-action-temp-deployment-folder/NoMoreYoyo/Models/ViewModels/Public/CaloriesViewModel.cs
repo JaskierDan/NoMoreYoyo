@@ -14,9 +14,9 @@ namespace NoMoreYoyo.Models
         public decimal Fats { get; set; }
         [DisplayName("Sex")]
         public int Sex { get; set; }
-        [DisplayName("Weight")]
+        [DisplayName("Weight (kg)")]
         public decimal Weight { get; set; }
-        [DisplayName("Height")]
+        [DisplayName("Height (cm)")]
         public decimal Height { get; set; }
         [DisplayName("Age")]
         public int Age { get; set; }

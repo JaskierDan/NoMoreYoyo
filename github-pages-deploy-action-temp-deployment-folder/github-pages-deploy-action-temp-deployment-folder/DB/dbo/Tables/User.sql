@@ -8,8 +8,11 @@
     [Sex]            BIT            NOT NULL,
     [RegisteredDate] DATETIME       NOT NULL,
     [Age]            INT            NULL,
+    [Salt]           NVARCHAR (MAX) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
