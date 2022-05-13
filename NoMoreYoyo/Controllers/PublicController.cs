@@ -257,7 +257,9 @@ namespace NoMoreYoyo.Controllers
 
         private void GetDataForBodypart(BodyAttributesViewModel model)
         {
-            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.SelectedBodypart.ToString()).Where(u => u.UserId == 1);
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.SelectedBodypart.ToString()).Where(u => u.UserId == user?.Id);
 
             try
             {
