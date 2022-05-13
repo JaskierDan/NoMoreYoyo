@@ -13,13 +13,6 @@ namespace NoMoreYoyo.Helpers
             string saltedPassword = salt.ToString();
             return saltedPassword;
         }
-        public static string HashPassword(string saltedPassword)
-        {
-            using var sha = SHA256.Create();
-            var asBytes = Encoding.Default.GetBytes(saltedPassword);
-            var hashed = sha.ComputeHash(asBytes);
-            return Convert.ToBase64String(hashed);           
-        }
         public static string GenerateHashWithSalt(string enteredPassword, string enteredSalt)
         {
             string sHashWithSalt = enteredPassword + enteredSalt;
