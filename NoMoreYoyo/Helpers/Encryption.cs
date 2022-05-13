@@ -7,7 +7,7 @@ namespace NoMoreYoyo.Helpers
     public static class Encryption
     {
         public static string SaltPassword(string password)
-        { 
+        {
             Random random = new Random();
             int salt = random.Next();
             string saltedPassword = salt.ToString();
@@ -21,6 +21,5 @@ namespace NoMoreYoyo.Helpers
             byte[] hash = algorithm.ComputeHash(saltedHashBytes);
             return Convert.ToBase64String(hash);
         }
-
     }
 }
