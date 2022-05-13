@@ -105,7 +105,7 @@ namespace NoMoreYoyo.Controllers
             }
             if (user != null)
             {
-                if (user.Password != model.Password)
+                if (user.Password != Encryption.GenerateHashWithSalt(model.Password,user.Salt))
                 {
                     ModelState.AddModelError(nameof(model.Password), "The password you provided is incorrect!");
                 }
@@ -210,11 +210,13 @@ namespace NoMoreYoyo.Controllers
 
         private void RegisterUser(SignUpViewModel model)
         {
+            string salt = Encryption.SaltPassword(model.Password);
             var user = new User()
             {
                 UserName = model.UserName,
                 EmailAddress = model.EmailAddress,
-                Password = model.Password,
+                Salt = salt,
+                Password = Encryption.GenerateHashWithSalt(model.Password,salt),
                 Sex = model.Sex,
                 RegisteredDate = DateTime.UtcNow
             };
