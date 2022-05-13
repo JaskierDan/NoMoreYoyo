@@ -126,6 +126,9 @@ namespace NoMoreYoyo.Migrations
                     b.Property<DateTime>("RegisteredDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Salt")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Sex")
                         .HasColumnType("bit");
 
