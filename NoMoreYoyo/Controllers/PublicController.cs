@@ -4,7 +4,6 @@ using NoMoreYoyo.Helpers;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
 namespace NoMoreYoyo.Controllers
@@ -47,14 +46,36 @@ namespace NoMoreYoyo.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+        public IActionResult Feedback(FeedbackViewModel model)
+        {
+            if (IsAuthenticated())
+                return View(model);
+
+            return RedirectToAction(nameof(Login));
+        }
+
         public IActionResult Login(LoginViewModel model)
         {
-            return View(model);
+            if (!IsAuthenticated())
+            {
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction(nameof(BodyAttributes));
+            }
         }
 
         public IActionResult SignUp(SignUpViewModel model)
         {
-            return View(model);
+            if (!IsAuthenticated())
+            {
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction(nameof(BodyAttributes));
+            }
         }
 
         [HttpPost]
@@ -219,6 +240,32 @@ namespace NoMoreYoyo.Controllers
 
             RegisterUser(model);
             return RedirectToAction(nameof(BodyAttributes));
+        }
+
+        [HttpPost]
+        public ActionResult SendFeedback(FeedbackViewModel model)
+        {
+            if (model.Title == null)
+            {
+                ModelState.AddModelError(nameof(model.Title), "This field cannot be empty!");
+            }
+            if (model.FeedbackMessage == null)
+            {
+                ModelState.AddModelError(nameof(model.FeedbackMessage), "This field cannot be empty!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Feedback), model);
+            }
+
+            return RedirectToAction(nameof(Feedback));
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction(nameof(Login));
         }
 
         private void RegisterUser(SignUpViewModel model)
