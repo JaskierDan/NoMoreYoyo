@@ -30,7 +30,7 @@ namespace NoMoreYoyo.Controllers
                 }
 
                 GetMeasurementTypes(model);
-
+                GetMeasuredBodyPart(model);
                 return View(model);
             }
 
@@ -70,7 +70,31 @@ namespace NoMoreYoyo.Controllers
                 return View(nameof(BodyAttributes), model);
             }
 
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var measurement = new BodyAttribute
+            {
+                UserId = user.Id,
+                MeasurementTypeId = model.SelectedMeasurementType,
+                Value = model.Value,
+                Date = DateTime.UtcNow
+            };
+
+            DbContext.Attach(measurement);
+            DbContext.SaveChanges();
+
             GetMeasurementTypes(model);
+            GetMeasuredBodyPart(model);
+
+            return View(nameof(BodyAttributes), model);
+        }
+
+        [HttpPost]
+        public ActionResult GetGraph(BodyAttributesViewModel model)
+        {
+            GetMeasurementTypes(model);
+            GetMeasuredBodyPart(model);
+            GetDataForBodypart(model);
 
             return View(nameof(BodyAttributes), model);
         }
@@ -94,7 +118,7 @@ namespace NoMoreYoyo.Controllers
             }
             if (user != null)
             {
-                if (user.Password != Encryption.GenerateHashWithSalt(model.Password,user.Salt))
+                if (user.Password != Encryption.GenerateHashWithSalt(model.Password, user.Salt))
                 {
                     ModelState.AddModelError(nameof(model.Password), "The password you provided is incorrect!");
                 }
@@ -205,7 +229,7 @@ namespace NoMoreYoyo.Controllers
                 UserName = model.UserName,
                 EmailAddress = model.EmailAddress,
                 Salt = salt,
-                Password = Encryption.GenerateHashWithSalt(model.Password,salt),
+                Password = Encryption.GenerateHashWithSalt(model.Password, salt),
                 Sex = model.Sex,
                 RegisteredDate = DateTime.UtcNow
             };
@@ -223,10 +247,39 @@ namespace NoMoreYoyo.Controllers
 
             foreach (var item in measurementTypes)
             {
-                Debug.WriteLine("Lefutott");
                 model.MeasurementTypes.Add(new SelectListItem
                 {
                     Text = $"{item.Name} ({item.Metric})",
+                    Value = item.Id.ToString()
+                });
+            }
+        }
+
+        private void GetDataForBodypart(BodyAttributesViewModel model)
+        {
+            var user = DbContext.Users.FirstOrDefault(u => u.UserName == CurrentUser());
+
+            var result = DbContext.BodyAttributes.ToList().Where(s => s.MeasurementTypeId.ToString() == model.SelectedBodypart.ToString()).Where(u => u.UserId == user?.Id);
+
+            try
+            {
+                result.ToList().ForEach(s => model.BodyPartData.Add(Convert.ToInt32(s.Value)));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(nameof(model.BodyPartData), e.Message);
+            }
+        }
+
+        private void GetMeasuredBodyPart(BodyAttributesViewModel model)
+        {
+            var measurementTypes = DbContext.MeasurementTypes.ToList();
+
+            foreach (var item in measurementTypes)
+            {
+                model.MeasuredBodypart.Add(new SelectListItem
+                {
+                    Text = $"{item.Name}",
                     Value = item.Id.ToString()
                 });
             }

@@ -17,6 +17,7 @@ namespace NoMoreYoyo.Models
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+        public string Salt { get; set; }
         public decimal? Weight { get; set; }
         public decimal? Height { get; set; }
         public bool Sex { get; set; }

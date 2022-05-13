@@ -1,0 +1,22 @@
+﻿@model NoMoreYoyo.Models.FeedbackViewModel
+@{
+    ViewData["Title"] = "Feedback";
+}
+
+<div class="card">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card-body">
+        @using (Html.BeginForm("SendFeedback", "Public", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.LabelFor(model => model.Title, new { @class = "form-check-label text-uppercase" });
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @type = "text" });
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" });
+            <br />
+            @Html.LabelFor(model => model.FeedbackMessage, new { @class = "form-check-label text-uppercase" });
+            @Html.TextAreaFor(model => model.FeedbackMessage, new { @class = "form-control", @type = "text", @rows = 10 });
+            @Html.ValidationMessageFor(m => m.FeedbackMessage, "", new { @class = "text-danger" });
+            <br />
+            <button type="submit" class="form-control btn-primary">Send Feedback</button>
+        }
+    </div>
+</div>
