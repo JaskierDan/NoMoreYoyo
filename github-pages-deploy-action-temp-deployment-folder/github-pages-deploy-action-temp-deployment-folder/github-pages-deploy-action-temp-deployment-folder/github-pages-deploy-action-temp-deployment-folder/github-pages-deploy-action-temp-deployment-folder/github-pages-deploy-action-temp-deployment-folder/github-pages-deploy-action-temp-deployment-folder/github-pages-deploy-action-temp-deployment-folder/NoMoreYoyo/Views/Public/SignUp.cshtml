@@ -1,0 +1,58 @@
+﻿@model NoMoreYoyo.Models.SignUpViewModel
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4 pt-lg-5 align-self-start">
+                @using (Html.BeginForm("Register", "Public", FormMethod.Post, new { @class = "form-group" }))
+                {
+                    @Html.LabelFor(model => model.UserName, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.LabelFor(model => model.EmailAddress, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.LabelFor(model => model.Password, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @type = "password" })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.LabelFor(model => model.PasswordAgain, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.PasswordAgain, new { @class = "form-control", @type = "password" })
+                    @Html.ValidationMessageFor(model => model.PasswordAgain, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.LabelFor(model => model.Weight, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger", @type = "number" })
+                    <br />
+                    @Html.LabelFor(model => model.Height, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.Height, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger", @type = "number" })
+                    <br />
+                    @Html.LabelFor(model => model.Age, new { @class = "form-check-label text-uppercase" })
+                    @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger", @type = "number" })
+                    <br />
+                    @Html.LabelFor(model => model.Sex, new { @class = "form-check-label text-uppercase" })
+                    <hr class="mt-1 mb-1" />
+                    <div class="row">
+                        @Html.Label("MaleLabel", "Male", new { @class = "form-check-label col-lg-6" })
+                        @Html.RadioButtonFor(model => model.Sex, false, new { @class = "custom-radio form-control col-lg-6", @checked = "checked" })
+                    </div>
+                    <br />
+                    <div class="row">
+                        @Html.Label("FemaleLabel", "Female", new { @class = "form-check-label col-lg-6" })
+                        @Html.RadioButtonFor(model => model.Sex, true, new { @class = "Custom-radio form-control col-lg-6" })
+                    </div>
+                    <br />
+                    <button type="submit" class="form-control btn-primary">Sign Up</button>
+                    <a href="/">Already registered? Sign in here!</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
